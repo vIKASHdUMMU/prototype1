@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate Shell Script</title>
+</head>
+<body>
+    <h1>Jira to Shell Script Generator</h1>
+    <form id="scriptForm">
+        <label for="issue_key">Jira Issue Key:</label>
+        <input type="text" id="issue_key" name="issue_key" required>
+        <button type="submit">Generate</button>
+    </form>
+    <pre id="result"></pre>
+    <script>
+        document.getElementById('scriptForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const issueKey = document.getElementById('issue_key').value;
+            const res = await fetch('/generate_script', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({issue_key: issueKey})
+            });
+            const data = await res.json();
+            document.getElementById('result').textContent = data.result || data.error;
+        });
+    </script>
+</body>
+</html>
